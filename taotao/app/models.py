@@ -58,9 +58,9 @@ class Goods(db.Model):
     g_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # 商品名称
     g_name = db.Column(db.String(128))
-    #商品信息
+    # 商品信息
     g_information = db.Column(db.Text)
-    #商品价格
+    # 商品价格
     g_price = db.Column(db.String(64))
     # 促销价格
     g_saleprice = db.Column(db.String(64))
@@ -74,12 +74,14 @@ class Goods(db.Model):
     is_chioce = db.Column(db.Boolean,default=False)
     # 删除
     is_delete = db.Column(db.Boolean,default=False)
-    #商品外键
+    # 商品外键
     category = db.Column(db.Integer,db.ForeignKey('category.categoryid'))
     # 收藏反向
     collect = db.relationship('Collect', backref='goods')
     # 购物车反向
     cart = db.relationship('Cart', backref='goods')
+    # 商品评论反向
+    g_comment = db.relationship('Comment',backref='goods')
 
 
 
@@ -147,7 +149,7 @@ class Comment(db.Model):
     # 商品外键
     co_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
     # 攻略外键
-    # co_strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
+    strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
 
 # 购物车表
 class Cart(db.Model):
@@ -186,7 +188,7 @@ class Evaluate(db.Model):
     # 用户外键
     ev_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
     # 攻略外键
-    ev_strategy = db.Column(db.Integer, db.ForeignKey('strategy.s_id'))
+    ev_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 
 
 # 中间表taotao
