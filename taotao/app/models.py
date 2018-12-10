@@ -81,7 +81,7 @@ class Goods(db.Model):
     # 购物车反向
     cart = db.relationship('Cart', backref='goods')
     # 商品评论反向
-    g_comment = db.relationship('Comment',backref='goods')
+    g_evaluate = db.relationship('Evaluate',backref='goods')
 
 
 
