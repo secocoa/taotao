@@ -58,9 +58,9 @@ class Goods(db.Model):
     g_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # 商品名称
     g_name = db.Column(db.String(128))
-    #商品信息
+    # 商品信息
     g_information = db.Column(db.Text)
-    #商品价格
+    # 商品价格
     g_price = db.Column(db.String(64))
     # 促销价格
     g_saleprice = db.Column(db.String(64))
@@ -74,7 +74,7 @@ class Goods(db.Model):
     is_chioce = db.Column(db.Boolean,default=False)
     # 删除
     is_delete = db.Column(db.Boolean,default=False)
-    #商品外键
+    # 商品外键
     category = db.Column(db.Integer,db.ForeignKey('category.categoryid'))
     # 收藏反向
     collect = db.relationship('Collect', backref='goods')
