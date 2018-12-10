@@ -16,19 +16,19 @@ stategys_info = {
 # 攻略
 class CategoryModel(Resource):
     def get(self):
-        page = int(request.args.get('page'))
-        size = int(request.args.get('size'))
+        page = int(request.args.get('page') or 1)
+        size = int(request.args.get('size') or 3)
 
-        strategy = Strategy.query.all().limit(size).offset((page-1) * size)
-
+        strategy = Strategy.query.paginate(page=page,per_page=size).items
+        print(strategy,type(strategy))
         strategy_fields={
             'status':fields.Integer,
-            'strategy':fields.Nested(stategys_info)
+            'strategy':fields.List(fields.Nested(stategys_info)),
         }
 
-        res = marshal({'status':1,'strategy':strategy},strategy_fields)
+        return marshal({'status':1,'strategy':strategy},strategy_fields)
 
-        return res
+
 
 
 
