@@ -80,6 +80,8 @@ class Goods(db.Model):
     collect = db.relationship('Collect', backref='goods')
     # 购物车反向
     cart = db.relationship('Cart', backref='goods')
+    # 商品评论反向
+    g_comment = db.relationship('Comment',backref='goods')
 
 
 
@@ -147,7 +149,7 @@ class Comment(db.Model):
     # 商品外键
     co_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
     # 攻略外键
-    # co_strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
+    strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
 
 # 购物车表
 class Cart(db.Model):
@@ -186,7 +188,7 @@ class Evaluate(db.Model):
     # 用户外键
     ev_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
     # 攻略外键
-    ev_strategy = db.Column(db.Integer, db.ForeignKey('strategy.s_id'))
+    ev_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 
 
 # 中间表taotao
