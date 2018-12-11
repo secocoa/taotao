@@ -84,9 +84,24 @@ special_goods = {
 class StrategyContent(Resource):
     def get(self):
         strategy_id = request.args.get('id')
+        if strategy_id:
+            strategy = Strategy.query.get(strategy_id)
 
-        strategy = Strategy.query.get(strategy_id)
+            return_values = {
+                'status':fields.Integer,
+                'name':fields.String(attribute='s_name'),
+                'content':fields.String(attribute='s_context'),
+                'commentnum':fields.String(attribute='s_commentnum'),
+                'collectnum':fields.String(attribute='s_collectnum'),
+            }
 
-        print(strategy)
 
-        return {'status':200}
+
+            print(strategy_id)
+            print(strategy)
+
+            return {'status':0,}
+        print(strategy_id)
+
+
+        return {'status':1,'msg':'获取失败,没有传id'}
