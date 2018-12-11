@@ -16,7 +16,7 @@ good_info = {
 comments_info = {
     'body':fields.String(attribute='e_content'),
     'id':fields.Integer(attribute='e_id'),
-    # 'usename':fields
+    'usename':fields.String(attribute='ev_user')
 
 }
 specialgoods_info = {
@@ -36,7 +36,6 @@ class GoodsModel(Resource):
             # 找到评论
             comments = good.g_evaluate.all()
             #找到用户
-
             # 找到所有精选
             specialgoods = Goods.query.filter(Goods.is_chioce==1).all()
             # 随机10个精选

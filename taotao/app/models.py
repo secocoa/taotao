@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -141,11 +143,15 @@ class Strategy(db.Model):
     s_image = db.Column(db.Text)
     # 评论数
     s_commentnum = db.Column(db.String(64))
+    # 收藏数目
+    s_collectnum = db.Column(db.String(64))
     # 删除
     is_delete = db.Column(db.Boolean,default=False)
 # 攻略评论表
 class Comment(db.Model):
     commentid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    # 时间
+    c_time = db.Column(db.DateTime,default=datetime.now)
     # 内容
     c_content = db.Column(db.Text)
     # 父评论ID
@@ -191,6 +197,8 @@ class Evaluate(db.Model):
     is_delete = db.Column(db.Boolean, default=False)
     # 父评论ID
     e_parentid = db.Column(db.Integer)
+    # 时间
+    e_time = db.Column(db.DateTime, default=datetime.now)
     # 用户外键
     ev_user = db.Column(db.String(64), db.ForeignKey('user.u_name'))
     # 攻略外键
@@ -202,3 +210,12 @@ class Tag_Goods(db.Model):
     id = db.Column(db.Integer,primary_key=True,autoincrement=True)
     t_id = db.Column(db.Integer,db.ForeignKey('tags.t_id'))
     g_id = db.Column(db.Integer,db.ForeignKey('goods.g_id'))
+# 商品交易记录表
+class Deal(db.Model):
+    d_id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    # 时间
+    time = db.Column(db.DateTime,default=datetime.now)
+    # 用户外键
+    d_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
+    # 订单外键
+    d_pay = db.Column(db.Integer,db.ForeignKey('paygoods.paygoodsid'))
