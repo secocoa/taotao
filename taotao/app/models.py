@@ -52,6 +52,8 @@ class Collect(db.Model):
     c_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
     # 商品外键
     c_goods = db.Column(db.Integer,db.ForeignKey('goods.g_id'))
+    # 攻略外键
+    c_strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
 
 # 商品表
 class Goods(db.Model):
@@ -81,7 +83,7 @@ class Goods(db.Model):
     # 购物车反向
     cart = db.relationship('Cart', backref='goods')
     # 商品评论反向
-    g_evaluate = db.relationship('Evaluate',backref='goods')
+    g_evaluate = db.relationship('Evaluate',backref='goods',lazy='dynamic')
 
 
 
@@ -146,8 +148,10 @@ class Comment(db.Model):
     commentid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # 内容
     c_content = db.Column(db.Text)
-    # 商品外键
-    co_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
+    # 父评论ID
+    c_parentid = db.Column(db.Integer)
+    # 用户外键
+    co_user = db.Column(db.String(64),db.ForeignKey('user.u_name'))
     # 攻略外键
     strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
 
@@ -185,8 +189,10 @@ class Evaluate(db.Model):
     e_content = db.Column(db.Text)
     # 删除
     is_delete = db.Column(db.Boolean, default=False)
+    # 父评论ID
+    e_parentid = db.Column(db.Integer)
     # 用户外键
-    ev_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
+    ev_user = db.Column(db.String(64), db.ForeignKey('user.u_name'))
     # 攻略外键
     ev_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 

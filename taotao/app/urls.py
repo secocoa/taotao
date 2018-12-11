@@ -3,6 +3,7 @@ from flask_restful import Api
 
 
 from app.api.addressm import AddressModel
+from app.api.collectm import CollectModel
 from app.api.goodsm import GoodsModel
 
 from app.api.stategy import CategoryModel
@@ -26,6 +27,8 @@ api.add_resource(CategoryModel,'/strategy/')
 api.add_resource(AddressModel,'/address/')
 # 商品详情
 api.add_resource(GoodsModel,'/good/')
+# 收藏
+api.add_resource(CollectModel,'/collect/')
 
 
 
