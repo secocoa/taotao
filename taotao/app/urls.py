@@ -3,6 +3,8 @@ from flask_restful import Api
 
 
 from app.api.addressm import AddressModel
+from app.api.cartm import CartResource, Cartbk
+from app.api.cartnum import CartnumResource
 from app.api.goodsm import GoodsModel
 
 from app.api.stategy import CategoryModel
@@ -39,3 +41,10 @@ api.add_resource(Category_good,'/category/')
 # 攻略详情页面
 api.add_resource(StrategyContent,'/article/')
 
+
+#购物车增加以及展示
+api.add_resource(CartResource,'/cart/')
+#购物车删除
+api.add_resource(Cartbk,'/cartbk/')
+#购物车加减
+api.add_resource(CartnumResource,'/cartgnum/')
