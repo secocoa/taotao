@@ -216,9 +216,6 @@ class Deal(db.Model):
     # 用户外键
     d_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
 
-    # 订单外键
-    # d_pay = db.Column(db.Integer,db.ForeignKey('paygoods.paygoodsid'))
-
 # 商品回复评论表
 class Reevaluate(db.Model):
     # 评论ID

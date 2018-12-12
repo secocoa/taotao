@@ -130,19 +130,19 @@ class Paysre(Resource):
     @marshal_with(return_value)
     def post(self):
         gid = request.form.get('id')
-        print(gid)
+        print(type(gid))
         userid = 4
         print(userid)
-        # if not userid:
-        #     return {
-        #         'status': 1,
-        #         'msg': '用户未登录 请登录',
-        #     }
-        # if not gid:
-        #     return {
-        #         'status': 1,
-        #         'msg': '未选中商品',
-        #     }
+        if not userid:
+            return {
+                'status': 1,
+                'msg': '用户未登录 请登录',
+            }
+        if not gid:
+            return {
+                'status': 1,
+                'msg': '未选中商品',
+            }
         good = Goods.query.filter(Goods.g_id.in_(gid)).all()       #商品表
         cartgood = Cart.query.filter(Cart.ca_goods.in_(gid)).all() #购物车表
         adresses = Re_address.query.filter(and_(Re_address.re_user == userid,Re_address.is_default==1)).first()
@@ -163,35 +163,63 @@ class Paysre(Resource):
 
 class Delre(Resource):
     def post(self):
-        userid = session.get('id')
+        # userid = session.get('id')
+        userid = 4
         id = request.form.get("id")
+        print(id)
         nums = request.form.get("num")
-
+        print(nums)
+        #将传过来的字符串数组化
+        id =eval(id)
+        nums =eval(nums)
+        print(type(id))
+        print(nums)
         # ps 创建 大订单对象 并通过用户最新的订单获得大订单id
         deal = Deal()
+        deal.d_user = userid
         db.session.add(deal)
         db.session.commit()
-        if len(id) == 1:
-            good = Cart.query.filter(Cart.ca_goods.in_(id)).first()
+        deal = Deal.query.filter(Deal.d_user==userid).order_by(-Deal.d_id).first()
+        print(deal.d_id)
+        did = deal.d_id
+        index = 0
+        if len(id)== 1:
+            good = Goods.query.filter(Goods.g_id.in_( id)).first()
             paygood = Paygoods()
             paygood.pa_user = userid
             paygood.pa_goods = good.g_id
             paygood.is_pay = 1
-            paygood.pa_del = pid
+            paygood.pa_deal = did
+            paygood.pgoodsnum = nums[0]
             db.session.add(paygood)
+            db.session.commit()
+            cartgood = Cart.query.filter(Goods.g_id.in_(id)).first()
+            if not cartgood:
+                return {
+                    'status': 0,
+                    'msg':'提交订单成功',
+                }
+            db.session.delete(cartgood)
             db.session.commit()
             return {
                 'status': 0,
-                'msg':'提交订单成功',
+                'msg': '提交订单成功',
             }
-        goods = Cart.query.filter(Cart.ca_goods.in_(id)).all()
+        goods = Goods.query.filter(Goods.g_id.in_(id)).all()
+
         for good in goods:
+            print(good)
             paygood = Paygoods()
             paygood.pa_user = userid
             paygood.pa_goods = good.g_id
             paygood.is_pay = 1
-            paygood.pa_del = pid
+            paygood.pa_deal = did
+            paygood.pgoodsnum =nums[index]
             db.session.add(paygood)
+            db.session.commit()
+            index += 1
+            cartgood = Cart.query.filter(Cart.ca_goods==good.g_id).first()
+            db.session.delete(cartgood)
             db.session.commit()
         return {
             'status': 0,
