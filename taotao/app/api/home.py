@@ -5,7 +5,7 @@ from flask_restful import Resource, fields, marshal
 
 # 首页
 # 商品
-from app.models import Goods, Strategy, Comment
+from app.models import Goods, Strategy, Comment, User
 
 # 商品
 goods_value = {
@@ -69,14 +69,6 @@ strategy_content = {
     'collectnum':fields.String(attribute='s_collectnum'),
     'readnum':fields.String(attribute='s_readnum'),
 }
-# 评论内容
-comment_content = {
-    'id':fields.String(attribute='commentid'),
-    'content':fields.String(attribute='c_content'),
-    'username':fields.String(attribute='co_user'),
-    'time':fields.String(attribute='c_time'),
-
-}
 # 精选好货
 special_goods = {
     'id':fields.String(attribute='g_id'),
@@ -84,7 +76,27 @@ special_goods = {
     'price':fields.String(attribute='g_price'),
     'img':fields.String(attribute='g_img'),
 }
-
+# 主评论内容
+comment_content = {
+    # 主评论id
+    'id':fields.String(attribute='commentid'),
+    'content':fields.String(attribute='c_content'),
+    'time':fields.String(attribute='c_time'),
+}
+# 主评论人
+user_name = {
+    'uid':fields.Integer(),
+    'uname':fields.String(attribute='u_name'),
+}
+# 子评论
+recomment_content = {
+    'rid':fields.Integer(attribute='nt_id'),
+    'body':fields.String(attribute='nt_content'),
+    'uid':fields.String(attribute='u_id'),
+    'time':fields.String(attribute='nt_time'),
+    'bname':fields.String(attribute='nt_bname'),
+    'name':fields.String(attribute=''),
+}
 # 攻略详情页面
 class StrategyContent(Resource):
     def get(self):
@@ -102,6 +114,13 @@ class StrategyContent(Resource):
             # 评论数据 根据文章id
             comments = Comment.query.filter(Comment.strategy == strategy_id).all()
             # print(comments)
+            # 根据文章id,获取用户
+            for comment in comments:
+
+
+                id = comment.co_user
+                user = User.query.get(id).u_name
+                print(user)
 
             return_values = {
                 'status':fields.Integer,
@@ -109,12 +128,24 @@ class StrategyContent(Resource):
                 'strategy':fields.List(fields.Nested(strategy_content)),
                 # 评论数据
                 'arcomments':fields.List(fields.Nested(comment_content)),
+                # 主评论人
+                'user':fields.List(fields.Nested(user_name)),
+                # 子评论
+                'recomment':fields.List(fields.Nested(recomment_content)),
                 # 精选好货数据
                 'specialgoods':fields.List(fields.Nested(special_goods)),
             }
 
             # print(strategy_id)
             # print(strategy)
-            return marshal({'status':0,'strategy':strategy,'specialgoods':swipergoods ,'arcomments':comments},return_values)
+            return marshal({
+                'status':0,
+                'strategy':strategy,
+                'specialgoods':swipergoods,
+                'arcomments':comments,
+                'user':user,
+
+
+            },return_values)
         # print(strategy_id)
-        return {'status':1,'msg':'获取失败,没有传id'}
+        return {'status':1,'msg':'获取失败,没有传文章id'}
