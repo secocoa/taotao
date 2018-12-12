@@ -11,13 +11,13 @@ good_info = {
     'gprice':fields.String(attribute='g_price'),
     'gimg':fields.String(attribute='g_img'),
     'gcollectnum':fields.Integer(attribute='g_collectnum'),
-    'gcommentnum':fields.Integer(attribute='g_commentnum')
+    'gcommentnum':fields.Integer(attribute='g_commentnum'),
 }
 comments_info = {
     'body':fields.String(attribute='e_content'),
     'id':fields.Integer(attribute='e_id'),
-    'usename':fields.String(attribute='ev_user')
-
+    'usename':fields.String(attribute='ev_user'),
+    'time':fields.String(attribute='time')
 }
 specialgoods_info = {
     'saleprice':fields.String(attribute='g_saleprice'),
