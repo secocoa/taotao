@@ -184,7 +184,7 @@ class Paygoods(db.Model):
     # 用户外键
     pa_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
     # 商品数目
-    pgoodsnum = db.Column(db.String(64))
+    pgoodsnum = db.Column(db.Integer)
     # 商品外键
     pa_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 
