@@ -2,7 +2,7 @@ from flask import session, request, make_response, jsonify
 from flask_restful import Resource, fields, marshal_with
 from sqlalchemy import and_
 
-from app.models import Goods, Cart, db, Re_address, User, Paygoods
+from app.models import Goods, Cart, db, Re_address, User, Paygoods, Deal
 
 
 class CartnumResource(Resource):
@@ -168,6 +168,9 @@ class Delre(Resource):
         nums = request.form.get("num")
 
         # ps 创建 大订单对象 并通过用户最新的订单获得大订单id
+        deal = Deal()
+        db.session.add(deal)
+        db.session.commit()
         if len(id) == 1:
             good = Cart.query.filter(Cart.ca_goods.in_(id)).first()
             paygood = Paygoods()
