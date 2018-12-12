@@ -1,9 +1,6 @@
 from flask import request, session
 from flask_restful import Resource, fields, marshal_with
 
-from sqlalchemy import and_
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
 from app.models import User, db, Re_address, Cart, Goods
 
 
@@ -45,7 +42,7 @@ class CartResource(Resource):
         return {
             'status': 0,
             'nums': cartgoods,
-            'goods':goods,
+            'cartgoods':goods,
         }
     def post(self):
         uid = session.get('id') #获取用户id
@@ -73,7 +70,7 @@ class CartResource(Resource):
 class Cartbk(Resource):
     def get(self):
         id = request.args.get('cid')
-        cartgoods = Cart.query.filter(Cart.cartid.in_(id))
+        cartgoods = Cart.query.filter(Cart.ca_goods.in_(id))
         if not cartgoods:
             return {
                 'status':1,

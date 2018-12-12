@@ -27,7 +27,7 @@ class UserModel(Resource):
             gold = user.u_gold
             intergration = user.u_intergration
             id = user.u_id
-            address = Re_address.query.filter(and_(Re_address.r_id==id,Re_address.is_default==1)).first()
+            address = Re_address.query.filter(and_(Re_address.re_user==id,Re_address.is_default==1)).first()
             session['username'] = username
             session['id'] = id
             if not address:
