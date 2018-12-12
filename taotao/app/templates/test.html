@@ -12,16 +12,21 @@
 
 </script>
 <script>
-    var cid =new Array(3,10,4)
-
+    var cid =new Array()
+    cid.push(8)
+    var nums = new Array()
+    nums.push(3)
+    console.log(cid)
     var data_id = {
-    id:JSON.stringify(cid)
+    id:JSON.stringify(cid),
+    num:JSON.stringify(nums),
+
 };
 
     $.ajax({
     type:'POST',
     async:false,
-    url:"http://127.0.0.1:5000/pays/",
+    url:"http://127.0.0.1:5000/deal/",
     data:data_id,
     success:function (data) {
         console.log(data)
