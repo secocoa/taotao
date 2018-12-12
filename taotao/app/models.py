@@ -183,6 +183,8 @@ class Paygoods(db.Model):
     is_cancel = db.Column(db.Boolean,default=False)
     # 用户外键
     pa_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
+    # 商品数目
+    pgoodsnum = db.Column(db.String(64))
     # 商品外键
     pa_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 
