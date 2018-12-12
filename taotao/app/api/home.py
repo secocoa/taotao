@@ -5,7 +5,7 @@ from flask_restful import Resource, fields, marshal
 
 # 首页
 # 商品
-from app.models import Goods, Strategy
+from app.models import Goods, Strategy, Comment
 
 # 商品
 goods_value = {
@@ -43,65 +43,78 @@ class Home(Resource):
 # 首页分类详情
 class Category_good(Resource):
     def get(self):
+
         category_id = request.args.get('id')
-        # 分类里面的商品
-        goods = Goods.query.filter(Goods.category == category_id).all()
-        # 轮播图
-        swipergoods = random.sample(goods,4)
-        # swipergoods = goods[0:4]
+        if category_id:
+            # 分类里面的商品
+            goods = Goods.query.filter(Goods.category == category_id).all()
+            # 轮播图
+            swipergoods = random.sample(goods,4)
+            # swipergoods = goods[0:4]
 
-        return_c = {
-            'status':fields.Integer,
-            'goods':fields.List(fields.Nested(goods_value)),
-            'swipergoods':fields.List(fields.Nested(swiper_goods_c)),
-        }
+            return_c = {
+                'status':fields.Integer,
+                'goods':fields.List(fields.Nested(goods_value)),
+                'swipergoods':fields.List(fields.Nested(swiper_goods_c)),
+            }
 
-        return marshal({'status':200,'goods':goods,'swipergoods':swipergoods},return_c)
-
+            return marshal({'status':200,'goods':goods,'swipergoods':swipergoods},return_c)
+        return {'status':1,'msg':'获取失败,没有分类id'}
 
 # 攻略详情
 strategy_content = {
-    'name':fields.String(attribute='sname'),
-    'content':fields.String(attribute='s_content'),
+    'name':fields.String(attribute='s_name'),
+    'content':fields.String(attribute='s_context'),
     'commentnum':fields.String(attribute='s_commentnum'),
     'collectnum':fields.String(attribute='s_collectnum'),
+    'readnum':fields.String(attribute='s_readnum'),
 }
 # 评论内容
 comment_content = {
     'id':fields.String(attribute='commentid'),
     'content':fields.String(attribute='c_content'),
     'username':fields.String(attribute='co_user'),
+    'time':fields.String(attribute='c_time'),
+
 }
 # 精选好货
 special_goods = {
     'id':fields.String(attribute='g_id'),
     'name':fields.String(attribute='g_name'),
-    'content':fields.String(attribute='g_content'),
+    'price':fields.String(attribute='g_price'),
     'img':fields.String(attribute='g_img'),
 }
 
 # 攻略详情页面
 class StrategyContent(Resource):
     def get(self):
+        # 文章id
         strategy_id = request.args.get('id')
         if strategy_id:
+
             strategy = Strategy.query.get(strategy_id)
+            print(strategy)
+            # 所有商品
+            goodall = Goods.query.all()
+            # 随机取商品2个
+            swipergoods = random.sample(goodall, 2)
+
+            # 评论数据 根据文章id
+            comments = Comment.query.filter(Comment.strategy == strategy_id).all()
+            # print(comments)
 
             return_values = {
                 'status':fields.Integer,
-                'name':fields.String(attribute='s_name'),
-                'content':fields.String(attribute='s_context'),
-                'commentnum':fields.String(attribute='s_commentnum'),
-                'collectnum':fields.String(attribute='s_collectnum'),
+                # 文章数据
+                'strategy':fields.List(fields.Nested(strategy_content)),
+                # 评论数据
+                'arcomments':fields.List(fields.Nested(comment_content)),
+                # 精选好货数据
+                'specialgoods':fields.List(fields.Nested(special_goods)),
             }
 
-
-
-            print(strategy_id)
-            print(strategy)
-
-            return {'status':0,}
-        print(strategy_id)
-
-
+            # print(strategy_id)
+            # print(strategy)
+            return marshal({'status':0,'strategy':strategy,'specialgoods':swipergoods ,'arcomments':comments},return_values)
+        # print(strategy_id)
         return {'status':1,'msg':'获取失败,没有传id'}
