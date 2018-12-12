@@ -187,6 +187,8 @@ class Paygoods(db.Model):
     pgoodsnum = db.Column(db.Integer)
     # 商品外键
     pa_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
+    # 交易记录表外键
+    pa_deal = db.Column(db.Integer,db.ForeignKey('deal.d_id'))
 
 # 评价商品表
 class Evaluate(db.Model):
@@ -213,8 +215,11 @@ class Deal(db.Model):
     time = db.Column(db.DateTime,default=datetime.now)
     # 用户外键
     d_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
+<<<<<<< HEAD
     # 订单外键
-    d_pay = db.Column(db.Integer,db.ForeignKey('paygoods.paygoodsid'))
+    # d_pay = db.Column(db.Integer,db.ForeignKey('paygoods.paygoodsid'))
+=======
+>>>>>>> 57bc97c4d672bfbaaf3e0388179046d804d2e9e1
 # 商品回复评论表
 class Reevaluate(db.Model):
     # 评论ID
