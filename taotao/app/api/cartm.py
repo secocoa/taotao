@@ -70,7 +70,7 @@ class CartResource(Resource):
 class Cartbk(Resource):
     def get(self):
         id = request.args.get('cid')
-        cartgoods = Cart.query.filter(Cart.cartid.in_(id))
+        cartgoods = Cart.query.filter(Cart.ca_goods.in_(id))
         if not cartgoods:
             return {
                 'status':1,
