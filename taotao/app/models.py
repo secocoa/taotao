@@ -149,17 +149,15 @@ class Strategy(db.Model):
     is_delete = db.Column(db.Boolean,default=False)
 # 攻略评论表
 class Comment(db.Model):
-    commentid = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    com_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # 时间
     c_time = db.Column(db.DateTime,default=datetime.now)
     # 内容
     c_content = db.Column(db.Text)
-    # 父评论ID
-    c_parentid = db.Column(db.Integer)
     # 用户外键
-    co_user = db.Column(db.String(64),db.ForeignKey('user.u_name'))
+    co_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
     # 攻略外键
-    strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
+    c_strategy = db.Column(db.Integer,db.ForeignKey('strategy.s_id'))
 
 # 购物车表
 class Cart(db.Model):
@@ -185,6 +183,8 @@ class Paygoods(db.Model):
     is_cancel = db.Column(db.Boolean,default=False)
     # 用户外键
     pa_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
+    # 商品数目
+    pgoodsnum = db.Column(db.Integer)
     # 商品外键
     pa_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 
@@ -193,14 +193,10 @@ class Evaluate(db.Model):
     e_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     # 内容
     e_content = db.Column(db.Text)
-    # 删除
-    is_delete = db.Column(db.Boolean, default=False)
-    # 父评论ID
-    e_parentid = db.Column(db.Integer)
     # 时间
     e_time = db.Column(db.DateTime, default=datetime.now)
     # 用户外键
-    ev_user = db.Column(db.String(64), db.ForeignKey('user.u_name'))
+    ev_user = db.Column(db.Integer, db.ForeignKey('user.u_id'))
     # 攻略外键
     ev_goods = db.Column(db.Integer, db.ForeignKey('goods.g_id'))
 
@@ -219,3 +215,31 @@ class Deal(db.Model):
     d_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
     # 订单外键
     d_pay = db.Column(db.Integer,db.ForeignKey('paygoods.paygoodsid'))
+# 商品回复评论表
+class Reevaluate(db.Model):
+    # 评论ID
+    te_id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    # 评论内容
+    te_content = db.Column(db.Text)
+    # 父ID
+    te_parentid = db.Column(db.Integer)
+    # 评论时间
+    te_time = db.Column(db.DateTime,default=datetime.now)
+    # 被评论人名字
+    te_bname = db.Column(db.String(64))
+    # 用户外键
+    te_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
+# 攻略回复评论表
+class Recomment(db.Model):
+    # 评论ID
+    nt_id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    # 评论内容
+    nt_content = db.Column(db.Text)
+    # 父ID
+    nt_parentid = db.Column(db.Integer)
+    # 评论时间
+    nt_time = db.Column(db.DateTime,default=datetime.now)
+    # 被评论人名字
+    nt_bname = db.Column(db.String(64))
+    # 用户外键
+    nt_user = db.Column(db.Integer,db.ForeignKey('user.u_id'))
