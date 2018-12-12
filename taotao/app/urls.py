@@ -5,7 +5,7 @@ from flask_restful import Api
 from app.api.addressm import AddressModel
 
 from app.api.cartm import CartResource, Cartbk
-from app.api.cartnum import CartnumResource, Payre, Paysre
+from app.api.cartnum import CartnumResource, Payre, Paysre, Delre
 
 from app.api.collectm import CollectModel
 
@@ -58,3 +58,6 @@ api.add_resource(CartnumResource,'/cartgnum/')
 api.add_resource(Payre,'/pay/')
 #购物车结算
 api.add_resource(Paysre,'/pays/')
+#提交订单
+api.add_resource(Delre,'/deal/')
+#支付
