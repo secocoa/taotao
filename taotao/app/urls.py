@@ -8,6 +8,7 @@ from app.api.cartm import CartResource, Cartbk
 from app.api.cartnum import CartnumResource, Payre, Paysre, Delre, Moneyre
 
 from app.api.collectm import CollectModel
+from app.api.cqm import Cqre
 
 from app.api.goodsm import GoodsModel
 
@@ -62,3 +63,7 @@ api.add_resource(Paysre,'/pays/')
 api.add_resource(Delre,'/deal/')
 #支付
 api.add_resource(Moneyre,'/money/')
+
+
+#评论测试
+api.add_resource(Cqre,'/test/')
