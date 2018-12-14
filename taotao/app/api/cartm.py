@@ -1,4 +1,4 @@
-from flask import request, session
+from flask import request, session, make_response, jsonify
 from flask_restful import Resource, fields, marshal_with
 
 from app.models import User, db, Re_address, Cart, Goods
@@ -25,25 +25,23 @@ class CartResource(Resource):
     @marshal_with(return_cartvalueq)
     def get(self):
         id = session.get('id')
-        print(id)
         if not id: # 判断是否登录
             return {
                 'status': 1,
                 'msg': '请先登录',
             }
         cartgoods = Cart.query.filter(Cart.ca_user==id).all() #获取购物车中商品
-        print(cartgoods)
         c_id = []
         for cartgood in cartgoods:     #获得购物车表单中关联的商品id  放入c_id列表中
             c_id.append(cartgood.ca_goods)
-        print(c_id)
+
         goods = Goods.query.filter(Goods.g_id.in_(c_id)).all() #购物车中用户的商品对象
-        print(goods)
-        return {
+        res =  {
             'status': 0,
             'nums': cartgoods,
             'cartgoods':goods,
         }
+        return res
     def post(self):
         uid = session.get('id') #获取用户id
         if not uid: #判断用户是否登录

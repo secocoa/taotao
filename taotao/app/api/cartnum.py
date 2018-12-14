@@ -130,9 +130,9 @@ class Paysre(Resource):
     @marshal_with(return_value)
     def post(self):
         gid = request.form.get('id')
-        print(type(gid))
-        userid = 4
-        print(userid)
+        # print(type(gid))
+        userid = session.get('id')
+        # print(userid)
         if not userid:
             return {
                 'status': 1,
@@ -163,24 +163,27 @@ class Paysre(Resource):
 
 class Delre(Resource):
     def post(self):
-        # userid = session.get('id')
-        userid = 4
+        userid = session.get('id')
+        if not userid:
+            return {
+                'status': 1,
+                'msg': '用户未登录 请登录',
+            }
         id = request.form.get("id")
-        print(id)
+        # print(id)
         nums = request.form.get("num")
-        print(nums)
+        # print(nums)
         #将传过来的字符串数组化
         id =eval(id)
         nums =eval(nums)
-        print(type(id))
-        print(nums)
+        #print(type(id))
+        #print(nums)
         # ps 创建 大订单对象 并通过用户最新的订单获得大订单id
         deal = Deal()
         deal.d_user = userid
         db.session.add(deal)
         db.session.commit()
         deal = Deal.query.filter(Deal.d_user==userid).order_by(-Deal.d_id).first()
-        print(deal.d_id)
         did = deal.d_id
         index = 0
         if len(id)== 1:
@@ -188,7 +191,7 @@ class Delre(Resource):
             paygood = Paygoods()
             paygood.pa_user = userid
             paygood.pa_goods = good.g_id
-            paygood.is_pay = 1
+            paygood.is_pay = 0
             paygood.pa_deal = did
             paygood.pgoodsnum = nums[0]
             db.session.add(paygood)
@@ -198,21 +201,23 @@ class Delre(Resource):
                 return {
                     'status': 0,
                     'msg':'提交订单成功',
+                    'id': did,
                 }
             db.session.delete(cartgood)
             db.session.commit()
             return {
                 'status': 0,
                 'msg': '提交订单成功',
+                'id': did,
             }
         goods = Goods.query.filter(Goods.g_id.in_(id)).all()
 
         for good in goods:
-            print(good)
+            # print(good)
             paygood = Paygoods()
             paygood.pa_user = userid
             paygood.pa_goods = good.g_id
-            paygood.is_pay = 1
+            paygood.is_pay = 0
             paygood.pa_deal = did
             paygood.pgoodsnum =nums[index]
             db.session.add(paygood)
@@ -223,20 +228,36 @@ class Delre(Resource):
             db.session.commit()
         return {
             'status': 0,
-            'msg': '提交订单成功'
+            'msg': '提交订单成功',
+            'id': did,
         }
 
 class Moneyre(Resource):
     def post(self):
         userid = session.get('id')
+        if not userid:
+            return {
+                'status': 1,
+                'msg': '用户未登录 请登录',
+            }
+
         #获取商品交易记录最新的用户交易记录
+        id = request.form.get('id')
 
         #根据外键找到订单表里未支付的订单
+        paygoods = Paygoods.query.filter(Paygoods.pa_deal == id).all()
+        for paygood in paygoods:
+            paygood.is_pay = 1
+            db.session.add(paygood)
+            db.session.commit()
 
         #将订单的状态设为已购买
 
         #返回状态码
-
+        return {
+            'status':0,
+            'msg': '支付完成',
+        }
         #大功告成
 
 
