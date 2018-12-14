@@ -1,3 +1,6 @@
+import os
+
+from flask import request, session
 from flask_restful import Resource, fields, marshal
 
 from app.models import Comment, User, Recomment
@@ -63,3 +66,23 @@ class Cqre(Resource):
             'return_recomments_dic':  return_recomments_dic,
             'return_reuser_dic':return_reuser_dic,
         },res_info)
+
+
+
+
+
+class Changeuinfo(Resource):
+    def get(self):
+        uid = session.get('id')
+        if not uid:
+            return {
+                'status' : 1,
+                'msg': '请先登录',
+            }
+        user = User.query.filter(User.u_id == uid).first()
+
+        basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+        return {
+            'uname': basedir
+        }
