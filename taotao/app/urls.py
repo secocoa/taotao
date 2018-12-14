@@ -8,9 +8,17 @@ from app.api.cartm import CartResource, Cartbk
 from app.api.cartnum import CartnumResource, Payre, Paysre, Delre, Moneyre
 
 from app.api.collectm import CollectModel
+<<<<<<< HEAD
 from app.api.cqm import Cqre, Changeuinfo
+=======
+from app.api.cqm import Cqre
+from app.api.comment import CommentStrategy
+
+
+>>>>>>> 6a10f0338c6d8a3f51590e6ed3793cf4ebe64e36
 
 from app.api.goodsm import GoodsModel
+from app.api.reviews import GoodsReviews
 
 from app.api.stategy import CategoryModel
 
@@ -47,7 +55,10 @@ api.add_resource(Home,'/')
 api.add_resource(Category_good,'/category/')
 # 攻略详情页面
 api.add_resource(StrategyContent,'/article/')
-
+# 攻略发表评论
+api.add_resource(CommentStrategy,'/comments/')
+# 商品发表评论
+api.add_resource(GoodsReviews,'/reviews/')
 
 #购物车增加以及展示
 api.add_resource(CartResource,'/cart/')
