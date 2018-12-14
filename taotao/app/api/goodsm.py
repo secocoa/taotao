@@ -51,6 +51,7 @@ class GoodsModel(Resource):
                             'status':1,
                             'good':good,
                             'comments':comments,
-                            'specialgoods':specialgoods},all_info)
+                            'specialgoods':specialgoods,
+                            },all_info)
         else:
             return {'msg':'没有获取ID','status':0}
