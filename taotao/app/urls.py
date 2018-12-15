@@ -8,10 +8,12 @@ from app.api.cartm import CartResource, Cartbk
 from app.api.cartnum import CartnumResource, Payre, Paysre, Delre, Moneyre
 
 from app.api.collectm import CollectModel
+
+from app.api.cqm import Cqre, Changeuinfo
+
 from app.api.cqm import Cqre
 from app.api.comment import CommentStrategy
-
-
+from app.api.finalgood import FinalGood
 
 from app.api.goodsm import GoodsModel
 from app.api.reviews import GoodsReviews
@@ -21,14 +23,15 @@ from app.api.stategy import CategoryModel
 
 from app.api.home import Home, Category_good, StrategyContent
 
-from app.api.userm import UserModel
+from app.api.userm import UserModel, Logoutre
 
 api = Api()
 def init_urls(app):
     api.init_app(app)
 # 登录注册
 api.add_resource(UserModel,'/user/')
-
+#退出登录
+api.add_resource(Logoutre,'/logout/')
 
 
 # 攻略
@@ -36,8 +39,8 @@ api.add_resource(CategoryModel,'/strategy/')
 
 # 地址
 api.add_resource(AddressModel,'/address/')
-# 商品详情
-api.add_resource(GoodsModel,'/good/')
+# # 商品详情
+# api.add_resource(GoodsModel,'/good/')
 # 收藏
 api.add_resource(CollectModel,'/collect/')
 
@@ -71,7 +74,10 @@ api.add_resource(Paysre,'/pays/')
 api.add_resource(Delre,'/deal/')
 #支付
 api.add_resource(Moneyre,'/money/')
-
+#攻略详情
+api.add_resource(FinalGood,'/good/')
 
 #评论测试
 api.add_resource(Cqre,'/test/')
+#改变信息
+api.add_resource(Changeuinfo,'/uinfo/')

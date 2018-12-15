@@ -27,6 +27,8 @@ class User(db.Model):
     u_date = db.Column(db.String(64))
     # 会员
     is_vip = db.Column(db.Boolean,default=False)
+    #头像
+    u_head = db.Column(db.String(256))
     # 删除
     is_delete = db.Column(db.Boolean,default=False)
     # 地址反向

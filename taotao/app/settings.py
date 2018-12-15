@@ -1,3 +1,6 @@
+import os
+
+
 def get_db_uri(dbinfo):
     username = dbinfo.get('user') or "taotao"
     password = dbinfo.get('pwd') or "123456"
@@ -18,6 +21,7 @@ class Config():
     SESSION_TYPE = 'redis'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
+
 
 
 

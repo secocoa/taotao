@@ -125,7 +125,12 @@ class StrategyContent(Resource):
         # 随机取商品2个
         swipergoods = random.sample(goodall, 4)
 
+<<<<<<< HEAD
         comments = Comment.query.all()
+=======
+
+        comments = Comment.query.filter(Comment.c_strategy==strategy_id).all()
+>>>>>>> b295bac969f01f67396bfa0f91e72f54ef5b1372
 
         cuid = [comment.co_user for comment in comments]
         print(cuid)

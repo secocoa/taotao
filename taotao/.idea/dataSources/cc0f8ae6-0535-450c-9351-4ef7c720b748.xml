@@ -1169,6 +1169,7 @@
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
       <ColumnKind>normal</ColumnKind>
+      <OnUpdate>CURRENT_TIMESTAMP</OnUpdate>
     </column>
     <column id="292" parent="236" name="ev_user">
       <Position>4</Position>
@@ -1718,17 +1719,22 @@
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="394" parent="246" name="u_name">
+    <column id="394" parent="246" name="u_head">
+      <Position>10</Position>
+      <DataType>varchar(256)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="395" parent="246" name="u_name">
       <ColNames>u_name</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="395" parent="246" name="PRIMARY">
+    <key id="396" parent="246" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>u_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="396" parent="246" name="u_name">
+    <key id="397" parent="246" name="u_name">
       <ColNames>u_name</ColNames>
       <UnderlyingIndexName>u_name</UnderlyingIndexName>
     </key>

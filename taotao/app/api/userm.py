@@ -86,3 +86,10 @@ class UserModel(Resource):
                 return {'msg': '注册失败,邮箱已存在', 'status': 0}
             return {'msg': '注册失败,用户名已存在', 'status': 0}
 
+class Logoutre(Resource):
+    def get(self):
+        session.clear()
+        return {
+            'status':0,
+            'msg': '退出成功'
+        }

@@ -16,7 +16,7 @@ mail = Mail()
 def init_ext(app):
     sess.init_app(app)
     migrate.init_app(app)
-    #cache.init_app(app)
+    # cache.init_app(app)
     mail.init_app(app)
     db.init_app(app)
     # cors.init_app(app)
