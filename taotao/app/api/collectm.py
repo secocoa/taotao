@@ -1,7 +1,8 @@
-from flask import session
+from flask import session, request
 from flask_restful import Resource, marshal, fields
+from sqlalchemy import and_
 
-from app.models import User, Goods, Strategy
+from app.models import User, Goods, Strategy, Collect, db
 
 goods_info = {
     'gid':fields.Integer(attribute='g_id'),
@@ -60,3 +61,89 @@ class CollectModel(Resource):
         else:
             return {'msg':'请先登录','status':0}
 
+
+
+    def post(self):
+        id = request.form.get('id')
+        clfiy = request.form.get('clfiy')
+        uid = session.get('id')
+        print(id)
+        print(uid)
+        if not uid:
+            return {
+                'status':1,
+                'msg': '请登录'
+            }
+        print(type(clfiy), clfiy)
+        if clfiy == '1':
+            col = None
+            try:
+                col = Collect.query.filter(and_(Collect.c_goods== id,Collect.c_user==uid)).first()
+            except Exception:
+                print(Exception)
+            if col:
+                print(col)
+                db.session.delete(col)
+                db.session.commit()
+                good = Goods.query.get(id)
+                num = int(good.g_collectnum)
+                num -= 1
+                good.g_collectnum = str(num)
+                db.session.add(good)
+                db.session.commit()
+                return {
+                    'status': 0,
+                    'msg': '取消收藏成功'
+                }
+
+            if not col:
+                col = Collect(c_user=uid, c_goods=id,is_good=1)
+                db.session.add(col)
+                db.session.commit()
+                good = Goods.query.get(id)
+                num = int(good.g_collectnum)
+                num -= 1
+                good.g_collectnum = str(num)
+                db.session.add(good)
+                db.session.commit()
+                return {
+                    'status': 1,
+                    'msg': '收藏成功'
+                }
+
+
+        else:
+            col = None
+            try:
+                col = Collect.query.filter(and_(Collect.c_strategy == id, Collect.c_user == uid)).first()
+            except Exception:
+                print(Exception)
+            if col:
+                print(col)
+                db.session.delete(col)
+                db.session.commit()
+                strategy = Strategy.query.get(id)
+                num = int(strategy.s_collectnum)
+                num -= 1
+                strategy.s_collectnum = str(num)
+                db.session.add(strategy)
+                db.session.commit()
+                return {
+                    'status': 0,
+                    'msg': '取消收藏成功'
+                }
+
+            if not col:
+                col = Collect(c_user=uid, c_strategy=id, is_good=0)
+                db.session.add(col)
+                db.session.commit()
+                strategy = Strategy.query.get(id)
+                num = int(strategy.s_collectnum)
+                num += 1
+                strategy.s_collectnum = str(num)
+                db.session.add(strategy)
+                db.session.commit()
+                return {
+                    'status': 1,
+                    'msg': '收藏成功'
+                }

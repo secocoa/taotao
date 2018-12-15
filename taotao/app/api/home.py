@@ -120,7 +120,7 @@ class StrategyContent(Resource):
         swipergoods = random.sample(goodall, 4)
 
 
-        comments = Comment.query.all()
+        comments = Comment.query.filter(Comment.c_strategy==strategy_id).all()
 
         cuid = [comment.co_user for comment in comments]
         print(cuid)

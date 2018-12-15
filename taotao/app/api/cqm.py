@@ -82,7 +82,9 @@ class Changeuinfo(Resource):
         user = User.query.filter(User.u_id == uid).first()
 
         basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+        photopath = os.path.join(basedir,'/static/upload/')
+        
         return {
             'uname': basedir
         }
+
