@@ -15,6 +15,7 @@ from app.api.comment import CommentStrategy
 
 from app.api.goodsm import GoodsModel
 from app.api.reviews import GoodsReviews
+from app.api.seek import Seek
 
 from app.api.stategy import CategoryModel
 
@@ -43,8 +44,8 @@ api.add_resource(CollectModel,'/collect/')
 
 
 
-
-
+# 搜索功能
+api.add_resource(Seek,'/seek/')
 # 首页
 api.add_resource(Home,'/')
 # 首页分类详情

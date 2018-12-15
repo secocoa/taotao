@@ -6,7 +6,7 @@ from flask_restful import Resource
 
 
 
-from app.models import Evaluate, Reevaluate, User, db
+from app.models import Evaluate, Reevaluate, User, db, Goods
 
 
 # 商品发表评论
@@ -48,6 +48,10 @@ class GoodsReviews(Resource):
                 reevaluate.te_bname = name
                 db.session.add(reevaluate)
                 db.session.commit()
+                # 增加评论数
+                pinglun = Goods.query.get(goodid)
+                pinglun.g_commentnum = int(pinglun.g_commentnum) + 1
+                db.session.commit()
                 return {
                     'starus':0,
                     'msg':'子评论回复成功'
@@ -64,6 +68,10 @@ class GoodsReviews(Resource):
             reeva.te_bname = name
             db.session.add(reeva)
             db.session.commit()
+            # 增加评论数
+            pinglun = Goods.query.get(goodid)
+            pinglun.g_commentnum = int(pinglun.g_commentnum) + 1
+            db.session.commit()
 
             return {
                 'status':1,
@@ -75,6 +83,10 @@ class GoodsReviews(Resource):
         eva.ev_goods = goodid
         eva.ev_user = id
         db.session.add(eva)
+        db.session.commit()
+        # 增加评论数
+        pinglun = Goods.query.get(goodid)
+        pinglun.g_commentnum = int(pinglun.g_commentnum) + 1
         db.session.commit()
         return {
             'status':0,

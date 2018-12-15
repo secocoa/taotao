@@ -79,6 +79,5 @@ class GoodsModel(Resource):
                             'user':user,
                             'recom':recom,
                             'specialgoods':specialgoods},all_info)
-
         else:
             return {'msg':'没有获取ID','status':0}

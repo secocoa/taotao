@@ -1,7 +1,6 @@
 from flask import session, request
 from flask_restful import Resource
-from app.models import Recomment, User, db, Comment
-
+from app.models import Recomment, User, db, Comment, Strategy
 
 
 # 攻略发表评论
@@ -51,6 +50,11 @@ class CommentStrategy(Resource):
                 name = User.query.get(name_id).u_name
                 recom.nt_bname = name
                 db.session.add(recom)
+                db.session.commit()
+
+                # 增加评论数
+                pinglun = Strategy.query.get(strategy_id)
+                pinglun.s_collectnum = int(pinglun.s_collectnum) + 1
                 db.session.commit()
                 return {
                     'status': 0,

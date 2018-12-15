@@ -5,7 +5,9 @@ from flask_restful import Resource, fields, marshal
 
 # 首页
 # 商品
-from app.models import Goods, Strategy, Comment, User, Recomment, db
+from sqlalchemy import and_
+
+from app.models import Goods, Strategy, Comment, User, Recomment, db, Collect
 
 # 商品
 goods_value = {
@@ -106,6 +108,10 @@ class StrategyContent(Resource):
     def get(self):
          # 文章id
         strategy_id = request.args.get('id')
+
+         # 用户登录id
+        id = session.get('id')
+
         if not strategy_id:
             return {
                 'status' :1 ,
@@ -118,7 +124,6 @@ class StrategyContent(Resource):
         # print(goodall)
         # 随机取商品2个
         swipergoods = random.sample(goodall, 4)
-
 
         comments = Comment.query.all()
 
@@ -159,9 +164,14 @@ class StrategyContent(Resource):
                 reuser_dic[recomment.nt_id] = fields.Nested(user_info)  #
 
                 return_reuser_dic[recomment.nt_id] = reuser   #
-
-
-
+        # 增加浏览数
+        liulan = Strategy.query.get(strategy_id)
+        liulan.s_readnum = int(liulan.s_readnum) + 1
+        db.session.commit()
+        try:
+            col = Collect.query.filter(and_(Collect.c_strategy == strategy_id, Collect.c_user == id)).first()
+        except Exception:
+            col = None
 
         return_values = {
             'status':fields.Integer,
@@ -177,6 +187,7 @@ class StrategyContent(Resource):
             'recommentname':fields.Nested(reuser_dic),
             # 精选好货数据
             'specialgoods':fields.List(fields.Nested(special_goods)),
+            'collect':fields.Integer,
         }
 
         return marshal({
@@ -187,6 +198,7 @@ class StrategyContent(Resource):
             'user':user,
             'recomment':return_recomments_dic,
             'recommentname': return_reuser_dic,
+            'collect':1 if col else 0,
         },return_values)
 
 
